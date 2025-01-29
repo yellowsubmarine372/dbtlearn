@@ -33,6 +33,8 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   dbtlearn: #default is view
     +materialized: view
+    +post-hook:
+      - "GRANT SELECT ON {{this}} TO ROLE REPORTER" #executed for every dbtlearn model - executed multiple times
     dim: #dim subfolder materialized as table
       +materialized: table
     src: #src subfolder materialized as table
