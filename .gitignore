@@ -15,3 +15,6 @@ __pycache__/
 
 # csv files
 *.csv
+
+# assets
+assets/
