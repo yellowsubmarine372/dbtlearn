@@ -39,3 +39,6 @@ models:
       +materialized: table
     src: #src subfolder materialized as table
       +materialized: ephemeral
+
+vars:
+  user_name: default_user_name_for_project

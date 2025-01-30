@@ -11,8 +11,14 @@ SELECT
 * 
 FROM src_reviews
 WHERE review_text is not null
-{% if is_incremental() %} 
-    AND review_date > (SELECT MAX(review_date) FROM {{ this }}) 
-    --when incremental mode is true, if review_date is greater than the max review_date in the table, then append the new data (가장 최근의 review_date를 가져온다는 의미)
-    --this referes to fct_reviews.sql
+
+{% if is_incremental() %}
+    {% if var('start_date', False) and var('end_date', False) %}
+        {{ log('Loading data from ' ~ var('start_date') ~ ' to ' ~ var('end_date'), info=True) }}
+        AND review_date >= '{{ var("start_date") }}'
+        AND review_date <= '{{ var("end_date") }}'
+    {% else %}
+        AND review_date > (select max(review_date) from {{ this }})
+        {{ log('Loading' ~ this ~ ' incrementally (all missing dates)', info=True) }}
+    {% endif %}
 {% endif %}
